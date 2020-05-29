@@ -1,0 +1,2 @@
+# Boilercrate
+Generates boilerplate code.
