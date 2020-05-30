@@ -37,9 +37,6 @@ def show_help():
 	print('Other')
 	print('\t--list \t: show all available Boilers.')
 	print('\t--help \t: show this menu.')
-	print('')
-	print('More information:')
-	print('\tvisit: https://boilercrate.edvard.dev')
 
 
 def list_boilers():
