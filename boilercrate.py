@@ -24,21 +24,22 @@ def show_help():
 	print('Boilercrate')
 	print('A tool for generating boilerplate code.')
 	print('Usage:')
-	print('\tboilercrate --option')
-	print('\tor')
-	print('\tboilercrate [Boiler name] --option')
-	print('\tor')
-	print('\tboilercrate [Boiler name] <target folder>')
+	print('  boilercrate --option')
+	print('  or')
+	print('  boilercrate [Boiler name] --option')
+	print('  or')
+	print('  boilercrate [Boiler name] <target folder>')
 	print('')
 	print('Working with Boilers')
-	print('\t[Boiler name] --add \t: create a new Boiler.')
-	print('\t[Boiler name] --delete \t: delete a Boiler.')
+	print('  [Boiler name] --add   : create a new Boiler.')
+	print('  [Boiler name] --delete   : delete a Boiler.')
 	print('')
 	print('Other')
-	print('\t--list \t: show all available Boilers.')
-	print('\t--help \t: show this menu.')
+	print('  --list   : show all available Boilers.')
+	print('  --help   : show this menu.')
 
 
+# Lists all available boilers.
 def list_boilers():
 	possible_boilers = os.listdir(get_boiler_path('')[:-4])
 
@@ -50,15 +51,18 @@ def list_boilers():
 				print('- ' + possible_boiler[:-4])
 
 
+# Returns true if a Boiler exists.
 def boiler_exists(boiler_name):
 	return os.path.isfile(get_boiler_path(boiler_name))
 
 
+# Returns the path to a Boiler.
 def get_boiler_path(boiler_name):
 	from pathlib import Path
 	return str(Path.home()) + '/.boilercrate/boilers/' + boiler_name + '.zip'
 
 
+# Deletes a Boiler.
 def delete_boiler(boiler_name):
 	if boiler_exists(boiler_name):
 		action = input('Are you sure you want to delete \"' + boiler_name + '\"? (y/N) ')
@@ -67,6 +71,7 @@ def delete_boiler(boiler_name):
 			print('\"' + boiler_name + '\" was deleted')
 
 
+# Creates a new Boiler.
 def new_boiler(boiler_name):
 	import shutil
 
@@ -86,6 +91,7 @@ def new_boiler(boiler_name):
 		print('Error! A boiler with the name \"' + boiler_name + '\" already exists!')
 
 
+# Generates Boilers to a destination path.
 def generate_boiler(boiler_name, destination_path):
 	import zipfile
 
@@ -98,7 +104,7 @@ def generate_boiler(boiler_name, destination_path):
 				print('Canceled!')
 				exit()
 
-		# Extracts the Boiler to the user-selected path
+		# Extracts the Boiler to the user-selected path.
 		with zipfile.ZipFile(get_boiler_path(boiler_name)) as boiler_zip_file:
 			boiler_zip_file.extractall(destination_path)
 
@@ -107,53 +113,57 @@ def generate_boiler(boiler_name, destination_path):
 		print('Error! Boiler \"' + boiler_name + '\" could not be found!')
 
 
+# In case the tool was launched incorrectly.
 def fallback():
 	print('Please provide a Boiler name! You can view all available Boilers with the \"--list\" option')
 	print('Use \"--help\" for more information.')
 
 
-# Gets parameters and flags.
-if len(sys.argv) >= 1:
-	args = sys.argv[1:]
+# Start
+if __name__ == '__main__':
+	# Gets parameters and flags.
+	if len(sys.argv) >= 1:
+		args = sys.argv[1:]
 
-	options = []
-	params = []
+		options = []
+		params = []
 
-	# Separates out parameters and options (--[option]).
-	for arg in args:
-		if arg[0:2] == '--':
-			options.append(arg)
-			continue
+		# Separates out parameters and options (--[option]).
+		for arg in args:
+			if arg[0:2] == '--':
+				options.append(arg)
+				continue
 
-		params.append(arg)
+			params.append(arg)
 
-	if len(args) > 0 or len(params) > 0:
-		if len(params):
-			# Params where provided, and possible options too.
-			requested_boiler_name = params[0]
+		if len(args) > 0 or len(params) > 0:
+			if len(params):
+				# Params where provided, and possible options too.
+				requested_boiler_name = params[0]
 
-			if '--add' in options:
-				new_boiler(requested_boiler_name)
+				if '--add' in options:
+					new_boiler(requested_boiler_name)
 
-			if '--delete' in options:
-				delete_boiler(requested_boiler_name)
+				if '--delete' in options:
+					delete_boiler(requested_boiler_name)
 
-			if len(params) >= 2:
-				boiler_destination_path = params[1]
+				# No options where provided.
+				# Checks if two params where provided (possible: <[boiler name]> <[destination path]>).
+				if len(params) >= 2:
+					boiler_destination_path = params[1]
 
-				# Assume boiler generation.
-				generate_boiler(requested_boiler_name, boiler_destination_path)
-		else:
-			# No params where provided, only possible flags.
-			if '--list' in options:
-				list_boilers()
+					# Assume boiler generation.
+					generate_boiler(requested_boiler_name, boiler_destination_path)
+			else:
+				# No params where provided, only possible flags.
+				if '--list' in options:
+					list_boilers()
 
-			if '--help' in options:
-				show_help()
+				if '--help' in options:
+					show_help()
 
-		exit()
+			exit()
 
-
-# In case no/invalid arguments nor/or flags where given.
-fallback()
+	# In case no/invalid arguments nor/or flags where given.
+	fallback()
 
