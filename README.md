@@ -1,5 +1,5 @@
 # Boilercrate
-Store all of your boilerplate code templates in one convenient CLI-tool. Boilercrate keeps track of them so that you can generate them in seconds! No more copy-pasting.
+Store all of your boilerplate code templates in one convenient CLI-tool. Boilercrate keeps track of them so that you can generate them in seconds. No more copy-pasting.
 
 # Lingo
 - Boilercrate: this tool.
@@ -20,6 +20,7 @@ or
 
 or
 
+Insert boilerplate code based on a boiler.
 `python3 boilercrate.py [Boiler name] <target folder>`
 
 ## Working with Boilers
